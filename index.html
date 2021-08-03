@@ -2,17 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Calculator</title>
+  <title>Tic Tac Toe</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://use.typekit.net/tfw3wfo.css">
+ <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <script src="script.js" defer></script>
 </head>
 <body>
     <header>
-        <h1>Tic Tac Toe</h1>
+        <h1>TIC TAC TOE</h1>
     </header>
     <main>
-        <div class='whosTurn'>Human turn</div>
+        <button id='randomAI' class='mode active'>Random AI</button>
+        <button id='smartAI' class='mode'>Smart AI</button>
+        <div id='outcome'></div>
+        <div class='line'></div>
         <div class='gameBoard'>
             <div class="field" data-id='0'></div>
             <div class="field" data-id='1'></div>
@@ -24,8 +28,7 @@
             <div class="field" data-id='7'></div>
             <div class="field" data-id='8'></div>
         </div>
-        <div id='outcome'></div>
-        <button id='restart'>Restart</button>
+        <button id='restart'>Restart <i class="material-icons">refresh</i></button>
     </main>
     <footer>
         <small>

@@ -1,6 +1,33 @@
 body {
+    background:#c9e5ff;
     text-align: center;
+    font-family: 'Raleway', "Helvetica Neue", sans-serif; 
 }
+
+
+header h1 {
+    margin: 30px;
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 800 !important;
+  font-size:80px !important;
+	letter-spacing:0.1em !important;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: white;
+  text-shadow: 
+						5px 5px #ff1f8f,
+						10px 10px #000000;
+}
+
+#outcome {
+    font-size: 20px;
+    margin: 20px;
+}
+
+#outcome:after {
+    content: '\200b';
+}
+
 
 .gameBoard {
     margin: auto;
@@ -8,14 +35,18 @@ body {
     grid-template-rows: repeat(3, 1fr);
     grid-template-columns: repeat(3, 1fr);
     width: 450px;
+    height: 450px;
 }
 
 .field {
-    padding-left: 0;
-    padding-right: 0;
-    width: 150px;
-    height: 150px;
-    border: 1px solid black;
+    color: white;
+    background-color: #fc298f;
+    margin: 3px;
+    border: none;
+    display: flex;
+    justify-content: space-evenly;
+     align-items: center;
+    font-size: 72px;
 }
 
 footer {
@@ -29,3 +60,69 @@ footer {
     bottom: 0;
     background-color: #ffffff;
 }
+
+button {
+    transition: all .25s ease;
+    padding: 5px 12px 5px 12px;
+    font-family: 'Raleway';
+    font-size: 17px;
+    border-radius: 5px;
+    border: none;
+    background-color: #292929;
+    color: white;
+}
+
+#restart {
+    margin-top: 50px;
+    padding: 5px 12px 9px 12px;
+}
+
+button:hover {
+    color: #001F3F;
+    background-color: #fff;
+}
+
+i {
+    position: relative;
+    top: 5px;
+}
+
+.mode {
+    padding: 8px 12px 8px 12px;
+    margin: 0 20px 0 20px;
+    color: black;
+    background-color: #ffffff;
+}
+
+.mode:hover {
+    background-color: #f7c95a;
+}
+
+.active {
+    background-color: #f7c95a;
+    font-weight: bold;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.winningRow {
+    border: 4px dashed #f7c95a;
+    /* -moz-box-shadow:    inset 0 0 20px #f7c95a;
+    -webkit-box-shadow: inset 0 0 20px #f7c95a;
+    box-shadow:         inset 0 0 20px #f7c95a; */
+}
+
+
+/* .line {
+    position: relative;
+    top: 440px;
+    left: 90px;
+    height:10px;
+    width:0;
+    background:#1a1a1a;
+    transform:rotate(-45deg);
+    transform-origin:left;
+    animation:grow 0.25s linear forwards;
+  }
+  @keyframes grow{
+    to {width:600px;}
+  } */

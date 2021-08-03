@@ -22,14 +22,31 @@
         const boardObjects = document.getElementsByClassName('field');
         const restartBtn = document.querySelector('#restart');
         const outcome = document.querySelector('#outcome');
+        const randomAiBtn = document.querySelector('#randomAI');
+        const smartAiBtn = document.querySelector('#smartAI');
         let activeGame = true;
 
+        randomAiBtn.addEventListener('click', function() {
+            gameController.setMode('randomAI');
+            randomAiBtn.classList.add('active');
+            smartAiBtn.classList.remove('active');
+        })
+
+        smartAiBtn.addEventListener('click', function() {
+            gameController.setMode('smartAI');
+            smartAiBtn.classList.add('active');
+            randomAiBtn.classList.remove('active');
+        })
+
         const restart = () => {
-            restartBtn.textContent = 'Restart';
+            restartBtn.childNodes[0].textContent = 'Restart ';
             Gameboard.resetBoard();
             displayBoard();
             outcome.textContent = '';
             activeGame = true;
+            Array.from(boardObjects).forEach((boardObject, index) => {
+                boardObject.classList.remove('winningRow');
+            });
         }
         restartBtn.addEventListener('click', restart);
         Array.from(boardObjects).forEach((boardObject, index) => {
@@ -41,22 +58,26 @@
         });
         
         const displayBoard = () => {
-            document.querySelector('.whosTurn').textContent = gameController.whosTurn();
             for (i = 0; i < boardObjects.length; i++){
                 boardObjects[i].textContent = Gameboard.getBoard()[i];
             }
         }
         const showOutcome = (winner) => {         
-            restartBtn.textContent = 'Play Again';   
+            restartBtn.childNodes[0].textContent = 'Play Again ';   
             activeGame = false;
-            if (winner === 'tie') {
+            if (winner[0] === 'tie') {
                 outcome.textContent = 'It\'s a tie! 🎉';
             }
-            else if (winner === 'x') {
+            else if (winner[0] === 'x') {
                 outcome.textContent = 'Congrats! You win! 🎉';
             }
             else {
                 outcome.textContent = 'The AI wins! 🎉';
+            }
+            if (winner[1] !== null) {
+                boardObjects[winner[1][0]].classList.add('winningRow');
+                boardObjects[winner[1][1]].classList.add('winningRow');
+                boardObjects[winner[1][2]].classList.add('winningRow');
             }
         }
 
@@ -79,7 +100,7 @@
     const gameController = (() => {
         const _humanPlayer = Player('x');
         const _aiPlayer = Player('o');
-        const mode = 'smartAI';
+        let mode = 'randomAI';
         let currentPlayer = _humanPlayer;
         const checkForWin = () => {
             const winningCombos = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
@@ -87,15 +108,15 @@
                 if (Gameboard.getBoard()[combo[0]] !== '' && Gameboard.getBoard()[combo[0]] === Gameboard.getBoard()[combo[1]] && 
                 Gameboard.getBoard()[combo[1]] === Gameboard.getBoard()[combo[2]] &&
                 Gameboard.getBoard()[combo[2]] === Gameboard.getBoard()[combo[0]]) {
-                    return Gameboard.getBoard()[combo[0]];
+                    return [Gameboard.getBoard()[combo[0]], combo];
                 }
             }
             for (let i = 0; i < 9; i++) {
                 if (!Gameboard.getBoard()[i]) {
-                    return null;
+                    return [null, null];
                 }
             }
-            return 'tie';
+            return ['tie', null];
         }
 
 
@@ -103,7 +124,7 @@
             if (Gameboard.getBoard()[index] === '') {
                 Gameboard.updateBoard(currentPlayer, index);
                 displayController.displayBoard();
-                if (checkForWin() !== null) {
+                if (checkForWin()[0] !== null) {
                     endGame(checkForWin());
                 }
                 else {
@@ -117,26 +138,31 @@
             if (Gameboard.getBoard().includes('')) {
                 let index;
                 if (mode === 'randomAI') {
-                    while (true) {
-                        index = Math.floor(Math.random() * 9);
-                        if (Gameboard.getBoard()[index] === '') {
-                            break;
-                        }
-                    }
+                    index = randomMove();
                 }
                 else {
-                    console.log('smart ai...');
                     index = bestMove();
                 }
                 Gameboard.updateBoard(currentPlayer, index);
                 displayController.displayBoard();
-                if (checkForWin() !== null) {
+                if (checkForWin()[0] !== null) {
                     endGame(checkForWin());
                 }
                 else {
                     currentPlayer = _humanPlayer;
                 }
             }
+        }
+
+        const randomMove = () => {
+            let index;
+            while (true) {
+                index = Math.floor(Math.random() * 9);
+                if (Gameboard.getBoard()[index] === '') {
+                    break;
+                }
+            }
+            return index;
         }
 
         function bestMove() {
@@ -163,7 +189,7 @@
           };
           
           function minimax(board, depth, isMaximizing) {
-            let result = checkForWin();
+            let result = checkForWin()[0];
             if (result !== null) {
               return scores[result];
             }
@@ -192,31 +218,25 @@
               return bestScore;
             }
           }
-          
-
-    
-
-        const whosTurn = () => {
-            if (currentPlayer === _humanPlayer) {
-                return 'Human turn';
-            }
-            else {
-                return 'AI turn';
-            }
-        }
 
         const endGame = (winner) => {
             currentPlayer = _humanPlayer;
             displayController.showOutcome(winner);
         }
 
+        const setMode = (newMode) => {
+            mode = newMode;
+        }
+
         return {
             checkForWin,
             humanTurn,
             aiTurn,
-            whosTurn,
-            endGame
+            endGame, 
+            setMode
         };
+
+
 
     })();
 
